@@ -5,12 +5,10 @@ Vue.createApp({
     data() {
 
         return {
-            days: [{		'number':		3,
-                            'colour':		"#aaa",
-                            'width':		28							}],
+            days: [],
 
-            year: 2022,
-            numberOfTheMonth: '0',
+            year: 2023,
+            numberOfTheMonth: '6',
 
             months: [     { text: 'January', 		value: 0 },
                           { text: 'February', 	value: 1 },
@@ -46,7 +44,6 @@ Vue.createApp({
           	blankFieldsOfPreviousMonth = 6;
 
     	var oversize = blankFieldsOfPreviousMonth + numberOfDaysInMonth - 35;
-        this.debug = ""+ blankFieldsOfPreviousMonth + ' ' +  numberOfDaysInMonth
 
       	if ( blankFieldsOfPreviousMonth == 6 ) blankFieldsOfPreviousMonth = 5
 
@@ -82,13 +79,15 @@ Vue.createApp({
         nextDayDate.setDate( d.getDate() +1 )
 
       	while( nextDayDate.getDate() >= d.getDate()){
-          if (d.getDay() == 0){}
-          else
-          pushDay(d.getDate());
-          d.setDate( d.getDate() + 1 )
-          nextDayDate.setDate( nextDayDate.getDate() + 1 )
+            if (d.getDay() != 0)
+                pushDay(d.getDate());
+            d.setDate( d.getDate() + 1 )
+            nextDayDate.setDate( nextDayDate.getDate() + 1 )
 
         }
+
+        if (d.getDay() != 0)
+              pushDay(d.getDate());
 
         fieldColour = '#fff'
 
