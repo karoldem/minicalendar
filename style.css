@@ -1,0 +1,20 @@
+.field {
+
+    border-radius: 15px 50px 15px ;
+    padding: 5mm;
+    width: 15mm;
+    height: 20mm;
+    float:left;
+    margin:5mm;
+
+}
+
+
+
+body{
+
+    width: 297mm;
+    height: 210mm;
+    margin: 5mm;
+
+}
