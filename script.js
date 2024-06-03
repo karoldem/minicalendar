@@ -1,104 +1,119 @@
 
-
-Vue.createApp({
-
+const app = Vue.createApp({
     data() {
-
         return {
             days: [],
-
-            year: 2023,
-            numberOfTheMonth: '6',
-
-            months: [     { text: 'January', 		value: 0 },
-                          { text: 'February', 	value: 1 },
-                          { text: 'March',			value: 2 },
-                          { text: 'April', 			value: 3 },
-                          { text: 'May', 				value: 4 },
-                          { text: 'June', 			value: 5 },
-                          { text: 'July', 			value: 6 },
-                          { text: 'August', 		value: 7 },
-                          { text: 'September', 	value: 8 },
-                          { text: 'October', 		value: 9 },
-                          { text: 'November', 	value: 10 },
-                          { text: 'December', 	value: 11 }              ],
-            debug:''
-        }
+            months: [
+                { text: 'January', value: 0 },
+                { text: 'February', value: 1 },
+                { text: 'March', value: 2 },
+                { text: 'April', value: 3 },
+                { text: 'May', value: 4 },
+                { text: 'June', value: 5 },
+                { text: 'July', value: 6 },
+                { text: 'August', value: 7 },
+                { text: 'September', value: 8 },
+                { text: 'October', value: 9 },
+                { text: 'November', value: 10 },
+                { text: 'December', value: 11 },
+            ],
+            numberOfTheMonth: new Date().getMonth(),
+            year: new Date().getFullYear(),
+            debug: '',
+            imageSrc: null,
+            fieldWidth: '28mm'
+        };
     },
+    methods: {
+        handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.imageSrc = e.target.result;
+                    this.fieldWidth = '20mm';
+                };
+                reader.readAsDataURL(file);
+            }
+        },
+        updated() {
+            const d = new Date();
+            d.setFullYear(this.year);
+            d.setMonth(this.numberOfTheMonth);
 
+            d.setMonth(d.getMonth() + 1);
+            d.setDate(0);
+            var numberOfDaysInMonth = d.getDate();
 
+            d.setDate(1);
+            var blankFieldsOfPreviousMonth = d.getDay() - 1;
 
-    updated(){
-        const d = new Date();
-        d.setFullYear(this.year);
-        d.setMonth(this.numberOfTheMonth);
+            if (blankFieldsOfPreviousMonth == -1) {
+                blankFieldsOfPreviousMonth = 6;
+            }
 
-      	d.setMonth(d.getMonth()+1)
-      	d.setDate(0);
-      	var numberOfDaysInMonth = d.getDate();
+            var oversize = blankFieldsOfPreviousMonth + numberOfDaysInMonth - 35;
 
-      	d.setDate(1);
-      	var blankFieldsOfPreviousMonth = d.getDay() - 1;
+            if (blankFieldsOfPreviousMonth == 6) blankFieldsOfPreviousMonth = 5;
 
-        if (blankFieldsOfPreviousMonth == -1)
-          	blankFieldsOfPreviousMonth = 6;
+            if (oversize > 0) {
+                blankFieldsOfPreviousMonth = 0;
 
-    	var oversize = blankFieldsOfPreviousMonth + numberOfDaysInMonth - 35;
+                while (d.getDay() != 1) d.setDate(d.getDate() + 1);
+            }
 
-      	if ( blankFieldsOfPreviousMonth == 6 ) blankFieldsOfPreviousMonth = 5
+            var days = [];
+            var positionInTable = 0;
+            var fieldColour = '#fff';
 
-    		if ( oversize > 0 ) {
-          	blankFieldsOfPreviousMonth = 0
+            function pushDay(text) {
+                var width = '28mm';
 
-          	while(d.getDay() != 1) d.setDate(d.getDate()+1);
-        }
+                if (positionInTable % 6 == 5) width = '32mm';
 
-        var days = [   ]
-      	var positionInTable = 0;
-      	var fieldColour = '#fff'
+                days.push({
+                    'number': text,
+                    'colour': fieldColour,
+                    'width': width
+                });
 
-        function pushDay(text){
-          	var width = '28mm'
+                positionInTable++;
+            }
 
-          	if (positionInTable % 6 == 5 )
-              width = '32mm'
+            for (var i = 0; i < blankFieldsOfPreviousMonth; i++) pushDay();
 
-            days.push({		'number':		text,
-                          'colour':		fieldColour,
-                          'width':		width							});
+            fieldColour = '#abea';
 
-            positionInTable++;
-      	}
+            var nextDayDate = new Date(d);
+            nextDayDate.setDate(d.getDate() + 1);
 
-      	for(var i = 0; i<blankFieldsOfPreviousMonth; i++)
-          pushDay();
+            while (nextDayDate.getDate() >= d.getDate()) {
+                if (d.getDay() != 0)
+                    pushDay(d.getDate());
+                d.setDate(d.getDate() + 1);
+                nextDayDate.setDate(nextDayDate.getDate() + 1);
+            }
 
-      	fieldColour = '#abea'
-
-      	var nextDayDate = new Date(d);
-        nextDayDate.setDate( d.getDate() +1 )
-
-      	while( nextDayDate.getDate() >= d.getDate()){
             if (d.getDay() != 0)
                 pushDay(d.getDate());
-            d.setDate( d.getDate() + 1 )
-            nextDayDate.setDate( nextDayDate.getDate() + 1 )
 
+            fieldColour = '#fff';
+
+            // Ensure exactly 7 fields per week
+            while (positionInTable % 7 != 0) {
+                pushDay();
+            }
+
+            this.days = days;
         }
-
-        if (d.getDay() != 0)
-              pushDay(d.getDate());
-
-        fieldColour = '#fff'
-
-        pushDay();pushDay();pushDay();
-        pushDay();pushDay();pushDay();
-
-        pushDay();pushDay();pushDay();
-        pushDay();pushDay();pushDay();
-
-
-        this.days = days;
+    },
+    watch: {
+        numberOfTheMonth: 'updated',
+        year: 'updated'
+    },
+    mounted() {
+        this.updated();
     }
+});
 
-}).mount('#app')
+app.mount('#app');

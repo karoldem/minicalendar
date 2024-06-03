@@ -1,44 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-    <title>mini callendar</title>
+    <title>mini calendar</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/vue@3"></script>
-
 </head>
-
-
-
 <body>
-
     <div id="app">
-
         <p>
-            <div  v-for="i in days">
-                <div class=field v-bind:style="{ background: i.colour, width:i.width }" >
-                  {{ i.number }}
+            <div v-for="i in days" :key="i.number">
+                <div class="field" v-bind:style="{ background: i.colour, width: fieldWidth }">
+                    {{ i.number }}
                 </div>
             </div>
         </p>
 
-        <section >
+        <!-- File upload input -->
+        <section>
+            <input type="file" @change="handleFileUpload" />
+        </section>
+
+        <!-- Image to display uploaded photo -->
+        <img v-if="imageSrc" :src="imageSrc" class="uploaded-image" style="width: 210mm; height: auto;" />
+
+        <section>
             <select v-model="numberOfTheMonth">
-                <option class=nostyle v-for="option in months" :value="option.value">
-                  {{ option.text }}
+                <option class="nostyle" v-for="option in months" :value="option.value">
+                    {{ option.text }}
                 </option>
             </select>
 
-            <div><input v-model="year" /></div>
+            <div>
+                <input v-model="year" />
+            </div>
 
             <a href="https://karoldem.github.io/minicallendar/">https://karoldem.github.io/minicallendar/</a>
         </section>
-{{debug}}
+
+        {{debug}}
     </div>
 
-
-
     <script src="script.js"></script>
-
 </body>
 </html>
