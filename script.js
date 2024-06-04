@@ -1,4 +1,3 @@
-
 const app = Vue.createApp({
     data() {
         return {
@@ -99,10 +98,9 @@ const app = Vue.createApp({
 
             fieldColour = '#fff';
 
-            // Ensure exactly 7 fields per week
-            while (positionInTable % 7 != 0) {
-                pushDay();
-            }
+            // Push additional blank fields to ensure 6 extra fields with background color
+            pushDay(''); pushDay(''); pushDay('');
+            pushDay(''); pushDay(''); pushDay('');
 
             this.days = days;
         }

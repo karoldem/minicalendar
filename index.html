@@ -7,6 +7,8 @@
 </head>
 <body>
     <div id="app">
+	
+	    <img v-if="imageSrc" :src="imageSrc" class="uploaded-image" style="width: 210mm; height: auto;" />
         <p>
             <div v-for="i in days" :key="i.number">
                 <div class="field" v-bind:style="{ background: i.colour, width: fieldWidth }">
@@ -21,7 +23,7 @@
         </section>
 
         <!-- Image to display uploaded photo -->
-        <img v-if="imageSrc" :src="imageSrc" class="uploaded-image" style="width: 210mm; height: auto;" />
+
 
         <section>
             <select v-model="numberOfTheMonth">
