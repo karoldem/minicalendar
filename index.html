@@ -5,10 +5,9 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/vue@3"></script>
 </head>
-<body>
+<body :style="imageSrc ? { width: '210mm', height: '297mm' } : {}">
     <div id="app">
-	
-	    <img v-if="imageSrc" :src="imageSrc" class="uploaded-image" style="width: 210mm; height: auto;" />
+        <img v-if="imageSrc" :src="imageSrc" class="uploaded-image" style="width: 210mm; height: auto;" />
         <p>
             <div v-for="i in days" :key="i.number">
                 <div class="field" v-bind:style="{ background: i.colour, width: fieldWidth }">
@@ -16,32 +15,22 @@
                 </div>
             </div>
         </p>
-
-        <!-- File upload input -->
         <section>
             <input type="file" @change="handleFileUpload" />
         </section>
-
-        <!-- Image to display uploaded photo -->
-
-
         <section>
             <select v-model="numberOfTheMonth">
                 <option class="nostyle" v-for="option in months" :value="option.value">
                     {{ option.text }}
                 </option>
             </select>
-
             <div>
                 <input v-model="year" />
             </div>
-
             <a href="https://karoldem.github.io/minicallendar/">https://karoldem.github.io/minicallendar/</a>
         </section>
-
         {{debug}}
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
