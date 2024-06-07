@@ -80,7 +80,7 @@ const app = Vue.createApp({
             };
 
             for (let i = 0; i < blankFieldsOfPreviousMonth; i++) pushDay('');
-            fieldColour = '#abea';
+            fieldColour = '#FFA500';
 
             let nextDayDate = new Date(d);
             nextDayDate.setDate(d.getDate() + 1);
