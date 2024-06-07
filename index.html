@@ -7,10 +7,10 @@
 </head>
 <body :style="imageSrc ? { width: '210mm', height: '297mm' } : {}">
     <div id="app">
-        <img v-if="imageSrc" :src="imageSrc" class="uploaded-image" style="width: 210mm; height: auto;" />
+        <img v-if="imageSrc" :src="imageSrc" class="uploaded-image" style="width: 205mm; height: auto;" />
         <p>
             <div v-for="i in days" :key="i.number">
-                <div class="field" v-bind:style="{ background: i.colour, width: fieldWidth }">
+                <div class="field" v-bind:style="{ background: i.colour, width: fieldWidth, height: fieldHeight }">
                     {{ i.number }}
                 </div>
             </div>

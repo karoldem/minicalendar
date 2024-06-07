@@ -21,7 +21,8 @@ const app = Vue.createApp({
             debug: '',
             imageSrc: null,
             fieldWidth: '28mm',
-			imageSize: { width: 0, height: 0 }
+			fieldHeight: '20mm',
+            imageSize: { width: 0, height: 0 }
         };
     },
     methods: {
@@ -32,6 +33,7 @@ const app = Vue.createApp({
                 reader.onload = (e) => {
                     this.imageSrc = e.target.result;
                     this.fieldWidth = '15mm';
+					this.fieldHeight = '6.166666666666668mm';
                     document.body.style.width = '210mm';
                     document.body.style.height = '297mm';
                     const img = new Image();
@@ -39,7 +41,7 @@ const app = Vue.createApp({
                         this.imageSize.width = img.width;
                         this.imageSize.height = img.height;
                         console.log(`Image Width: ${this.imageSize.width}, Image Height: ${this.imageSize.height}`);
-                        this.debug = 'sergwer';
+                        this.debug = '' + (297 - 210 * img.height / img.width)/6 - 20  + 'mm';
                     };
                     img.src = e.target.result;
                 };
@@ -95,6 +97,7 @@ const app = Vue.createApp({
             for (let i = 0; i < 6; i++) pushDay('');
 
             this.days = days;
+            this.$nextTick(this.updateFieldHeight); // Ensure fields are updated
         }
     },
     watch: {
