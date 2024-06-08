@@ -1,7 +1,11 @@
 const app = Vue.createApp({
+	
     data() {
+		
         return {
+			
             days: [],
+			
             months: [
                 { text: 'January', value: 0 },
                 { text: 'February', value: 1 },
@@ -22,33 +26,63 @@ const app = Vue.createApp({
             imageSrc: null,
             fieldWidth: '28mm',
 			fieldHeight: '20mm',
-            imageSize: { width: 0, height: 0 }
+            imgWidth: '200mm',
+            imgHeight: 'auto',
+			imgMargin: '5mm',
         };
+		
     },
+	
     methods: {
+		
         handleFileUpload(event) {
+			
             const file = event.target.files[0];
+			
             if (file) {
+				
                 const reader = new FileReader();
+				
                 reader.onload = (e) => {
+					
                     this.imageSrc = e.target.result;
                     this.fieldWidth = '15mm';
-					this.fieldHeight = '6.166666666666668mm';
+					
                     document.body.style.width = '210mm';
                     document.body.style.height = '297mm';
                     const img = new Image();
                     img.onload = () => {
-                        this.imageSize.width = img.width;
-                        this.imageSize.height = img.height;
-                        console.log(`Image Width: ${this.imageSize.width}, Image Height: ${this.imageSize.height}`);
-                        this.debug = '' + (297 - 210 * img.height / img.width)/6 - 20  + 'mm';
+						
+                        if ((img.width / img.height) < (210 / 297)) {
+	   
+                            this.fieldHeight = '0mm';
+                            this.imgHeight = '187mm';
+                            this.imgWidth = 'auto';
+	   
+	  
+                        } else {
+	   
+                            this.imgWidth = '200mm';
+                            this.imgHeight = 'auto';
+                            let imgPhysicalHeight = (200 / img.width) * img.height;
+                            let imgHeightOfMargin = 10;
+                            let sumOfFieldsMargin = 20 * 5;
+                            let sumOfFieldsHeights = 297 - (imgPhysicalHeight + imgHeightOfMargin + sumOfFieldsMargin);
+                            this.fieldHeight = (sumOfFieldsHeights / 5) + 'mm';
+                            this.debug = `imgPhysicalHeight: ${imgPhysicalHeight}mm, sumOfFieldsHeights: ${sumOfFieldsHeights}mm`;
+                        }
+						
                     };
+					
                     img.src = e.target.result;
                 };
+				
                 reader.readAsDataURL(file);
             }
         },
+		
         updated() {
+			
             const d = new Date();
             d.setFullYear(this.year);
             d.setMonth(this.numberOfTheMonth);
@@ -60,10 +94,12 @@ const app = Vue.createApp({
             if (blankFieldsOfPreviousMonth == -1) blankFieldsOfPreviousMonth = 6;
             let oversize = blankFieldsOfPreviousMonth + numberOfDaysInMonth - 35;
             if (blankFieldsOfPreviousMonth == 6) blankFieldsOfPreviousMonth = 5;
+			
             if (oversize > 0) {
                 blankFieldsOfPreviousMonth = 0;
                 while (d.getDay() != 1) d.setDate(d.getDate() + 1);
             }
+			
             let days = [];
             let positionInTable = 0;
             let fieldColour = '#fff';
@@ -80,7 +116,7 @@ const app = Vue.createApp({
             };
 
             for (let i = 0; i < blankFieldsOfPreviousMonth; i++) pushDay('');
-            fieldColour = '#FFA500';
+            fieldColour = '#FED800';
 
             let nextDayDate = new Date(d);
             nextDayDate.setDate(d.getDate() + 1);
@@ -94,7 +130,7 @@ const app = Vue.createApp({
             if (d.getDay() != 0) pushDay(d.getDate());
             fieldColour = '#fff';
 
-            for (let i = 0; i < 6; i++) pushDay('');
+            for (let i = 0; i < 12; i++) pushDay('');
 
             this.days = days;
             this.$nextTick(this.updateFieldHeight); // Ensure fields are updated

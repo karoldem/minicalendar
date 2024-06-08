@@ -7,14 +7,16 @@
 </head>
 <body :style="imageSrc ? { width: '210mm', height: '297mm' } : {}">
     <div id="app">
-        <img v-if="imageSrc" :src="imageSrc" class="uploaded-image" style="width: 205mm; height: auto;" />
-        <p>
+        <!--- <img v-if="imageSrc" :src="imageSrc" class="uploaded-image" style="width: 200mm; height: auto; margin:5mm; border:0mm" /> --->
+		<!---<img v-if="imageSrc" :src="imageSrc" class="uploaded-image" v-bind:style="{ width: imgWidth; height: imgHeight; margin:imgMargin; } /> --->
+        <img v-if="imageSrc" :src="imageSrc" class="uploaded-image" v-bind:style="{ width: imgWidth, height: imgHeight, margin: imgMargin }" />
+
             <div v-for="i in days" :key="i.number">
                 <div class="field" v-bind:style="{ background: i.colour, width: fieldWidth, height: fieldHeight }">
                     {{ i.number }}
                 </div>
             </div>
-        </p>
+        
         <section>
             <input type="file" @change="handleFileUpload" />
         </section>
